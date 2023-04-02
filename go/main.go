@@ -1,47 +1,22 @@
 package main
 
 import (
-	"log"
+	"fmt"
 	"net/http"
-	"os"
-	"os/signal"
-	"sync/atomic"
-	"syscall"
 )
 
-type handler struct{}
-func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+func handler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, World!")
 }
 
-type subHandler struct {
-	val atomic.Value
+func graphHandler(w http.ResponseWriter, r *http.Request) {
+	graph := exampleGraph()
+	res := graph.BFS(5)
+	w.Write([]byte(fmt.Sprintf("u: %d, v: %d", res[0], res[1])))
 }
-func (h *subHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if h.val.Load().(bool) {
-		w.WriteHeader(http.StatusOK)
-		return
-	}
-	w.WriteHeader(http.StatusAccepted)
-}
-
-var (
-	ready = atomic.Value{}
-)
 
 func main() {
-	ready.Store(false)
-
-	mux := http.NewServeMux()
-	mux.Handle("/bench", &handler{})
-	mux.Handle("/readiness", &subHandler{val: ready})
-	go http.ListenAndServe(":8080", mux)
-
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt, syscall.SIGTERM)
-
-	ready.Store(true)
-	<-sigChan
-	log.Printf("Terminating service")
-
+	http.HandleFunc("/", handler)
+	http.HandleFunc("/graph", graphHandler)
+	http.ListenAndServe(":8080", nil)
 }
