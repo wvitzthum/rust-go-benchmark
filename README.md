@@ -1,6 +1,6 @@
 # rust-go-benchmark
 
-# Benchmarking
+# Benchmarking empty Http handler
 `ab -n 100000 -c 100 http://localhost:8080/`
 
 
@@ -77,44 +77,12 @@ Percentage of the requests served within a certain time (ms)
  100%     17 (longest request)
 ```
 
-# RUST BFS
-```bash
-Server Hostname:        localhost
-Server Port:            8080
 
-Document Path:          /graph
-Document Length:        14 bytes
+# Benchmarking BFS search with loading new graph on each request
+`ab -n 100000 -c 100 http://localhost:8080/graph`
 
-Concurrency Level:      100
-Time taken for tests:   12.814 seconds
-Complete requests:      100000
-Failed requests:        0
-Total transferred:      9000000 bytes
-HTML transferred:       1400000 bytes
-Requests per second:    7803.89 [#/sec] (mean)
-Time per request:       12.814 [ms] (mean)
-Time per request:       0.128 [ms] (mean, across all concurrent requests)
-Transfer rate:          685.89 [Kbytes/sec] received
 
-Connection Times (ms)
-              min  mean[+/-sd] median   max
-Connect:        0    0   0.3      0       1
-Processing:     2   11   0.7     11      17
-Waiting:        0    8   1.6      8      16
-Total:          2   11   0.7     11      17
-
-Percentage of the requests served within a certain time (ms)
-  50%     11
-  66%     11
-  75%     11
-  80%     11
-  90%     11
-  95%     12
-  98%     12
-  99%     13
- 100%     17 (longest request)
- ```
-# GO BFS
+## GO BFS
 ```bash
 Server Hostname:        localhost
 Server Port:            8080
@@ -149,5 +117,43 @@ Percentage of the requests served within a certain time (ms)
   95%     13
   98%     13
   99%     14
+ 100%     17 (longest request)
+```
+
+## RUST BFS
+```bash
+Server Hostname:        localhost
+Server Port:            8080
+
+Document Path:          /graph
+Document Length:        14 bytes
+
+Concurrency Level:      100
+Time taken for tests:   12.814 seconds
+Complete requests:      100000
+Failed requests:        0
+Total transferred:      9000000 bytes
+HTML transferred:       1400000 bytes
+Requests per second:    7803.89 [#/sec] (mean)
+Time per request:       12.814 [ms] (mean)
+Time per request:       0.128 [ms] (mean, across all concurrent requests)
+Transfer rate:          685.89 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.3      0       1
+Processing:     2   11   0.7     11      17
+Waiting:        0    8   1.6      8      16
+Total:          2   11   0.7     11      17
+
+Percentage of the requests served within a certain time (ms)
+  50%     11
+  66%     11
+  75%     11
+  80%     11
+  90%     11
+  95%     12
+  98%     12
+  99%     13
  100%     17 (longest request)
  ```
